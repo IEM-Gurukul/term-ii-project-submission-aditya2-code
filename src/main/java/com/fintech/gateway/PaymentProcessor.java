@@ -56,16 +56,24 @@ public class PaymentProcessor {
             return result;
 
         } catch (ValidationException e) {
+            // Non-recoverable validation failure
             logger.error("Validation failed for transaction {}: {}", transactionId, e.getMessage());
             transaction.setStatus(TransactionStatus.DECLINED);
             if (auditLogger != null) auditLogger.log(transaction, "DECLINED: " + e.getMessage());
             return new TransactionResult(transactionId, TransactionStatus.DECLINED, e.getMessage());
             
         } catch (GatewayTimeoutException e) {
+            // Recoverable gateway timeout - will be handled by retry mechanism in Phase 10
             logger.error("Gateway timeout for transaction {}: {}", transactionId, e.getMessage());
             transaction.setStatus(TransactionStatus.FAILED);
             if (auditLogger != null) auditLogger.log(transaction, "FAILED: Gateway timeout");
             return new TransactionResult(transactionId, TransactionStatus.FAILED, "Gateway timeout: " + e.getMessage());
+        } catch (Exception e) {
+            // Unexpected system error
+            logger.error("Unexpected error for transaction {}: {}", transactionId, e.getMessage(), e);
+            transaction.setStatus(TransactionStatus.FAILED);
+            if (auditLogger != null) auditLogger.log(transaction, "FAILED: Internal error");
+            return new TransactionResult(transactionId, TransactionStatus.FAILED, "Internal system error");
         }
     }
 }
