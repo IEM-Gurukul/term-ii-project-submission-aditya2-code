@@ -46,8 +46,12 @@ public class PaymentProcessor {
             // 1. Run Validation Chain
             validationChain.executeChain(transaction);
             
-            // 2. Process via Gateway
-            TransactionResult result = gateway.process(transaction);
+            // 2. Process via Gateway with Retry Support
+            TransactionResult result = retryHandler.executeWithRetry(
+                () -> gateway.process(transaction), 
+                transaction, 
+                auditLogger
+            );
             
             // 3. Update Status based on result
             transaction.setStatus(result.getStatus());
