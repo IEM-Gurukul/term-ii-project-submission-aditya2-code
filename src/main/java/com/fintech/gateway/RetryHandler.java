@@ -50,7 +50,7 @@ public class RetryHandler {
                     Thread.sleep(delay);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
-                    throw new PaymentException("Retry interrupted", ie);
+                    throw new GatewayTimeoutException("Retry interrupted");
                 }
             }
         }

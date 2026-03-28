@@ -1,5 +1,29 @@
 plugins {
     id 'java-library'
+    id 'application'
+}
+
+application {
+    mainClass = 'com.fintech.gateway.Main'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['main/java']
+        }
+        resources {
+            srcDirs = ['main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['test/java']
+        }
+        resources {
+            srcDirs = ['test/resources']
+        }
+    }
 }
 
 repositories {
@@ -14,6 +38,7 @@ dependencies {
     // Testing
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.0'
 }
 
 java {

@@ -15,10 +15,21 @@ public class FileAuditLogger implements AuditLogger {
     private static final Logger logger = LoggerFactory.getLogger(FileAuditLogger.class);
     private final String filePath;
 
+    /**
+     * Creates a new FileAuditLogger with the specified file path.
+     * 
+     * @param filePath the path to the audit log file
+     */
     public FileAuditLogger(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Logs a transaction event to a pipe-delimited text file.
+     * 
+     * @param t the transaction being audited
+     * @param event the event description to log
+     */
     @Override
     public void log(Transaction t, String event) {
         String timestamp = LocalDateTime.now().toString();

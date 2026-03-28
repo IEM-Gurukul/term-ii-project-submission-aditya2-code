@@ -6,6 +6,12 @@ import java.time.LocalDateTime;
  * Implementation of AuditLogger that writes events to the console.
  */
 public class ConsoleAuditLogger implements AuditLogger {
+    /**
+     * Logs a transaction event to the standard output.
+     * 
+     * @param t the transaction being audited
+     * @param event the event description to log
+     */
     @Override
     public void log(Transaction t, String event) {
         String timestamp = LocalDateTime.now().toString();

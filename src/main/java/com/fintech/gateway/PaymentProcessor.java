@@ -14,11 +14,17 @@ public class PaymentProcessor {
     private final ValidationChain validationChain;
     private PaymentGateway gateway;
     private final AuditLogger auditLogger;
+    private final RetryHandler retryHandler;
 
     public PaymentProcessor(ValidationChain validationChain, PaymentGateway gateway, AuditLogger auditLogger) {
+        this(validationChain, gateway, auditLogger, new RetryHandler(3, 1000));
+    }
+
+    public PaymentProcessor(ValidationChain validationChain, PaymentGateway gateway, AuditLogger auditLogger, RetryHandler retryHandler) {
         this.validationChain = validationChain;
         this.gateway = gateway;
         this.auditLogger = auditLogger;
+        this.retryHandler = retryHandler;
     }
 
     /**
